@@ -1,0 +1,7 @@
+{
+  "semi": true,
+  "singleQuote": true,
+  "pugAttributeSeparator": "none",
+  "pugWrapAttributesThreshold": 3,
+  "endOfLine": "auto"
+}

@@ -1,0 +1,139 @@
+// MEDIA
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1400px;
+
+// COLORS
+$white: #ffffff;
+
+// FONTS
+$sserif: sans-serif;
+$serif: serif;
+
+:root {
+  --bg-screen: #ffffff;
+  --bg-secondary: #353c4f;
+  --textColor: #000000;
+  --primary: #6a31ff;
+  --secondary: #9b9b9b;
+  --primary-light: rgba(106, 49, 255, 0.2);
+  --alert: #df1111;
+}
+:root.dark {
+  --bg-screen: #0a121e;
+  --bg-secondary: #353c4f;
+  --textColor: #ffffff;
+}
+
+/*** The new CSS Reset - version 1.4.0 (last updated 16.11.2021) ***/
+
+/*
+    Remove all the styles of the "User-Agent-Stylesheet", except for the 'display' property
+    - The "symbol *" part is to solve Firefox SVG sprite bug
+ */
+*:where(:not(iframe, canvas, img, svg, video):not(svg *, symbol *)) {
+  all: unset;
+  display: revert;
+}
+
+/* Preferred box-sizing value */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove list styles (bullets/numbers) */
+ol,
+ul {
+  list-style: none;
+}
+
+/* For images to not be able to exceed their container */
+img {
+  max-width: 100%;
+}
+
+/* removes spacing between cells in tables */
+table {
+  border-collapse: collapse;
+}
+
+/* revert the 'white-space' property for textarea elements on Safari */
+textarea {
+  white-space: revert;
+}
+
+/* revert for bug in Chromium browsers
+ - fix for the content editable attribute will work properly. */
+:where([contenteditable]) {
+  -webkit-user-modify: read-write;
+  overflow-wrap: break-word;
+  -webkit-line-break: after-white-space;
+  line-break: after-white-space;
+}
+
+a {
+  cursor: pointer;
+}
+
+html {
+  font-family: $sserif;
+  color: var(--textColor);
+}
+
+.view {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen {
+  width: 62.5rem;
+  max-width: 62.5rem;
+  height: calc(40.4375rem - 2px);
+  max-height: calc(40.4375rem - 2px);
+  position: relative;
+  border-radius: 50px;
+  padding: 1.9rem;
+  background-image: url("../img/ipadScreen.png");
+  z-index: 9999999;
+  &-container {
+    overflow: hidden;
+    position: relative;
+    padding: 1.6rem;
+  }
+}
+
+.landing {
+  width: 95%;
+  height: 100%;
+  margin-inline: auto;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 88888;
+  animation: 0.8s disappear-to-top ease-in-out 1.5s forwards;
+  &-logo {
+    width: 70%;
+  }
+}
+
+@keyframes disappear-to-top {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
