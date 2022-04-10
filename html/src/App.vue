@@ -23,8 +23,10 @@ const toggleDarkmode = () => {
           logo
         moon.cursor-pointer(@click="toggleDarkmode" v-if='!isDark')
         sun.cursor-pointer(@click="toggleDarkmode" v-else)
-      router-view
-      //- introLoader
+      router-view(v-slot='{ Component }')
+        transition(name="scale" mode="out-in")
+          component(:is='Component')
+      introLoader
 </template>
 
 <style lang="scss" scopped></style>

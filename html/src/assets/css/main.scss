@@ -102,6 +102,8 @@ html {
   padding: 1.9rem;
   background-image: url("../img/ipadScreen.png");
   z-index: 9999999;
+  transition: all .2s ease;
+  user-select: none;
   &-container {
     overflow: hidden;
     position: relative;
@@ -129,6 +131,57 @@ html {
   }
 }
 
+.badge {
+  font-size: .8rem;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  display: inline-block;
+  padding: .2rem .7rem;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  &-large {
+    padding: .4rem 1rem .4rem .4rem;
+    position: absolute;
+    top: .9rem;
+    right: .5rem;
+
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  min-width: 170px;
+  color: white !important;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+}
+
+.small-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.w-500 {
+  width: 500px;
+}
+
+.input {
+  position: relative;
+  &-error {
+    border-color: var(--alert) !important;
+  }
+  &-area {
+    border: 2px solid var(--textColor);
+    border-radius: 15px;
+    padding: 1.2rem 1rem;
+    margin-bottom: .5rem;
+  }
+}
+
 @keyframes disappear-to-top {
   0% {
     transform: translateY(0);
@@ -136,4 +189,16 @@ html {
   100% {
     transform: translateY(-100%);
   }
+}
+
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.5s ease;
+}
+
+
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
 }

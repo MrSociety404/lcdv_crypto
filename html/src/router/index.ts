@@ -12,12 +12,12 @@ const routes: any = [
     component: () => import('../views/Wallet.vue'),
   },
   {
-    path: '/',
+    path: '/navigation',
     name: 'navigation',
     component: () => import('../views/Navigation.vue'),
   },
   {
-    path: '/actions/:type',
+    path: '/actions/:name',
     name: 'actions',
     component: () => import('../views/Actions.vue'),
   },
