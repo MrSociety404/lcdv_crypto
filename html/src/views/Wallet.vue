@@ -1,22 +1,16 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { formatter } from '../utils';
+import { formatter, navigateBack } from '../utils';
 
 import chevron from '../assets/svg/chevron-down.svg';
 import back from '../assets/svg/back.svg';
 
-const router = useRouter();
 const store = useStore();
 
 const totalValue = computed(() => store.getters.totalWalletValue);
 const cryptos = computed(() => store.state.cryptos);
 const wallet = computed(() => store.state.wallet);
-
-const navigateBack = () => {
-  router.go(-1);
-};
 
 const getCrytoAmout = (id: number) => {
   const walletCrypto = wallet.value.find((c: any) => c.id === id);

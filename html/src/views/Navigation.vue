@@ -1,25 +1,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { navigateTo, navigateBack } from '../utils';
 
 import back from '../assets/svg/back.svg';
-
-const router = useRouter();
 const store = useStore();
 
 const cryptos = computed(() => store.state.cryptos);
-
-const navigateBack = () => {
-  router.go(-1);
-};
-
-const navigateTo = (path: string, option?: any) => {
-  if (option) {
-    return router.push({ name: path, params: option });
-  }
-  router.push({ name: path });
-};
 </script>
 
 <template lang="pug">

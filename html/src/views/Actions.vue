@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
-import { formatter } from '../utils';
+import { formatter, navigateBack } from '../utils';
 
 import useVuelidate from '@vuelidate/core';
 import { required, numeric, minValue } from '@vuelidate/validators';
@@ -11,7 +11,6 @@ import chevron from '../assets/svg/chevron-down.svg';
 import warning from '../assets/svg/warning.svg';
 
 // utility variables
-const router = useRouter();
 const route = useRoute();
 const store = useStore();
 
@@ -50,31 +49,31 @@ const amountValue = computed(() => {
 });
 
 // Functions
-const navigateBack = () => {
-  router.go(-1);
-};
-const validateAmout = () => {
-  if (isBuying.value) {
-    return (v$.value.amount.$model || 0) > wallet.value.quantity;
-  }
-  return amountValue.value > money.value;
-};
 const buyCrypto = () => {
-  store.commit('addCryptoToWallet', {
-    id: currentCrypto.value.id,
-    quantity: parseInt(v$.value.amount.$model || '0'),
-  });
+  try {
+    store.commit('addCryptoToWallet', {
+      id: currentCrypto.value.id,
+      quantity: parseInt(v$.value.amount.$model || '0'),
+      price: amountValue.value,
+    });
+  } catch (err) {
+    invalideAmount.value = true;
+  }
 };
 const sellCrypto = () => {
-  store.commit('sellCryptoToWallet', {
-    id: currentCrypto.value.id,
-    quantity: parseInt(v$.value.amount.$model || '0'),
-  });
+  try {
+    store.commit('sellCryptoToWallet', {
+      id: currentCrypto.value.id,
+      quantity: parseInt(v$.value.amount.$model || '0'),
+      price: amountValue.value,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 const onSubmit = async () => {
   const isFormValid = await v$.value.$validate();
-  const isValidAmout = validateAmout();
-  if (!isFormValid && isValidAmout) return;
+  if (!isFormValid) return;
   return isBuying.value ? buyCrypto() : sellCrypto();
 };
 </script>
@@ -97,7 +96,28 @@ const onSubmit = async () => {
       chevron
   p.text-center.text-secondary.mb-1 {{ currentCryptoWalletAmount() }} {{ currentCrypto.id }} disponible
   p.text-center.text-secondary.mb-2 {{ money }} $ disponible
-  div
+  div(v-show='isBuying')
+    label.text-secondary.mb-2.block(for="amount") {{ isBuying ? 'Acquérir' : 'Revendre' }}
+    .input
+      input#amount.w-full.input-area(
+        name="amount" 
+        v-model='v$.amount.$model' 
+        placeholder="1 000"
+        @blur='v$.amount.$touch()'
+        :class="`${v$.amount.$error ? 'input-error' : ''}`"
+      ).
+      .badge.badge-large
+        .flex.gap-2.items-center
+          img.small-icon(:src='currentCrypto.icon')
+          | {{ currentCrypto.id }}
+    p.text-alert.h-6.mb-2
+      .flex.items-center.gap-4(v-if='v$.amount.$error')
+        warning
+        | Montant invalide, vérifier les informations
+      .flex.items-center.gap-4(v-if='invalideAmount')
+        warning
+        | Montant invalide, montant invalide
+  div(v-show='!isBuying')
     label.text-secondary.mb-2.block(for="amount") {{ isBuying ? 'Acquérir' : 'Revendre' }}
     .input
       input#amount.w-full.input-area(

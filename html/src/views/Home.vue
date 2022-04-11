@@ -1,25 +1,16 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { formatter } from '../utils';
+import { formatter, navigateTo } from '../utils';
 
 import wallet from '../assets/svg/wallet.svg';
 import exchange from '../assets/svg/exchange.svg';
 import chevron from '../assets/svg/chevron-down.svg';
 
-const router = useRouter();
 const store = useStore();
 
 const totalValue = computed(() => store.getters.totalWalletValue);
 const cryptos = computed(() => store.state.cryptos);
-
-const navigateTo = (path: string, option?: any) => {
-  if (option) {
-    return router.push({ name: path, params: option });
-  }
-  router.push({ name: path });
-};
 </script>
 
 <template lang="pug">
