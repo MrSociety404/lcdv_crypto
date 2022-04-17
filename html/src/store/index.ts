@@ -32,11 +32,16 @@ export default createStore({
     },
   },
   mutations: {
+    initCrypto: (state: any, payload: any) => {
+      state.cryptos = payload.cryptos;
+      state.wallet = payload.wallet;
+      state.money = payload.money;
+    },
     addCryptoToWallet: (
       state: any,
       payload: { id: string; quantity: number; price: number }
     ) => {
-      if (state.money < payload.price) throw new Error('Insufficient funds');
+      if (state.money < payload.price) throw new Error('Fond insuffisant');
 
       const crypto = state.wallet.find(
         (cryptoEl: any) => cryptoEl.id === payload.id
@@ -60,10 +65,12 @@ export default createStore({
       const crypto = state.wallet.find(
         (cryptoEl: any) => cryptoEl.id === payload.id
       );
-      if (!crypto) throw new Error("Can't find crypto in wallet");
+      if (!crypto) throw new Error('Vous ne possèdez pas de cette crypto');
       const cryptoId = state.wallet.indexOf(crypto);
+      if (state.wallet[cryptoId].quantity < payload.quantity)
+        throw new Error('Vous ne possèdez pas assez de cette crypto');
       state.wallet[cryptoId].quantity -= payload.quantity;
-      state.money -= payload.price;
+      state.money += payload.price;
     },
   },
 });

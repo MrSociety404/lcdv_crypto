@@ -9,6 +9,7 @@ import { required, numeric, minValue } from '@vuelidate/validators';
 
 import chevron from '../assets/svg/chevron-down.svg';
 import warning from '../assets/svg/warning.svg';
+import info from '../assets/svg/info.svg';
 
 // utility variables
 const route = useRoute();
@@ -31,7 +32,11 @@ const cryptos = computed(() => store.state.cryptos);
 const wallet = computed(() => store.state.wallet);
 const money = computed(() => store.state.money);
 const isBuying = ref(true);
-const invalideAmount = ref(false);
+const alert = ref({
+  show: false,
+  message: '',
+  type: 'error',
+});
 
 const currentCrypto = computed(() => {
   const id = route.params.name;
@@ -49,6 +54,17 @@ const amountValue = computed(() => {
 });
 
 // Functions
+const showNotif = (
+  message: string = 'Transaction validée',
+  type: string = 'info'
+) => {
+  alert.value.show = true;
+  alert.value.message = message;
+  alert.value.type = type;
+  setTimeout(() => {
+    alert.value.show = false;
+  }, 1500);
+};
 const buyCrypto = () => {
   try {
     store.commit('addCryptoToWallet', {
@@ -56,8 +72,9 @@ const buyCrypto = () => {
       quantity: parseInt(v$.value.amount.$model || '0'),
       price: amountValue.value,
     });
-  } catch (err) {
-    invalideAmount.value = true;
+    showNotif();
+  } catch (err: any) {
+    showNotif(err.message, 'error');
   }
 };
 const sellCrypto = () => {
@@ -67,8 +84,9 @@ const sellCrypto = () => {
       quantity: parseInt(v$.value.amount.$model || '0'),
       price: amountValue.value,
     });
-  } catch (err) {
-    console.log(err);
+    showNotif();
+  } catch (err: any) {
+    showNotif(err.message, 'error');
   }
 };
 const onSubmit = async () => {
@@ -79,7 +97,7 @@ const onSubmit = async () => {
 </script>
 
 <template lang="pug">
-.w-500.mx-auto
+.w-500.mx-auto.relative.overflow-hidden
   .bg-bgSecondary.w-full.rounded-full.transition-all
     button.text-white.text-center.rounded-full.py-2.px-4(
       :class='`${!isBuying ? "w-1/2" : "w-1/2 bg-primary"}`' 
@@ -95,7 +113,7 @@ const onSubmit = async () => {
       | - 20,00 %
       chevron
   p.text-center.text-secondary.mb-1 {{ currentCryptoWalletAmount() }} {{ currentCrypto.id }} disponible
-  p.text-center.text-secondary.mb-2 {{ money }} $ disponible
+  p.text-center.text-secondary.mb-2 {{ formatter.format(money) }} disponible
   div(v-show='isBuying')
     label.text-secondary.mb-2.block(for="amount") {{ isBuying ? 'Acquérir' : 'Revendre' }}
     .input
@@ -114,9 +132,6 @@ const onSubmit = async () => {
       .flex.items-center.gap-4(v-if='v$.amount.$error')
         warning
         | Montant invalide, vérifier les informations
-      .flex.items-center.gap-4(v-if='invalideAmount')
-        warning
-        | Montant invalide, montant invalide
   div(v-show='!isBuying')
     label.text-secondary.mb-2.block(for="amount") {{ isBuying ? 'Acquérir' : 'Revendre' }}
     .input
@@ -135,9 +150,6 @@ const onSubmit = async () => {
       .flex.items-center.gap-4(v-if='v$.amount.$error')
         warning
         | Montant invalide, vérifier les informations
-      .flex.items-center.gap-4(v-if='invalideAmount')
-        warning
-        | Montant invalide, montant invalide
   .mb-4
     label.text-secondary.mb-2.block(for="result") Valeur
     .input
@@ -149,6 +161,11 @@ const onSubmit = async () => {
   .flex.items-center.justify-between.gap-6
     button.bg-bgSecondary.button.w-full.mx-auto(@click="navigateBack") Retour
     button.bg-primary.button.w-full.mx-auto(@click="onSubmit") Procéder
+  transition(name='from-bottom')  
+    .alert(v-if='alert.show' :class="`alert-${alert.type}`")
+      warning(v-if='alert.type === "error" ')
+      info(v-else)
+      h2 {{ alert.message }}
 </template>
 
 <style lang="scss"></style>

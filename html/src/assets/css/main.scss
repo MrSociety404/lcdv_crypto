@@ -20,6 +20,7 @@ $serif: serif;
   --secondary: #9b9b9b;
   --primary-light: rgba(106, 49, 255, 0.2);
   --alert: #df1111;
+  --info: #179017 ;
 }
 :root.dark {
   --bg-screen: #0a121e;
@@ -180,6 +181,36 @@ html {
     padding: 1.2rem 1rem;
     margin-bottom: .5rem;
   }
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 3rem;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  position: absolute;
+  width: 100%;
+  bottom: 0rem;
+  &-error {
+    background-color: #c22020;
+    color: white;
+  }
+  &-info {
+    background-color: var(--info);
+    color: white;
+  }
+}
+.from-bottom-enter-active,
+.from-bottom-leave-active {
+  transition: all 0.4s ease-in-out;
+}
+.from-bottom,
+.from-bottom-leave-to {
+  opacity: 0;
+  transform: translateY(3rem);
 }
 
 @keyframes disappear-to-top {
